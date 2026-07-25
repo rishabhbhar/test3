@@ -1,0 +1,113 @@
+@authUrl = http://localhost:5001/api/auth
+@productsUrl = http://localhost:5002/api/products
+@ordersUrl = http://localhost:5003/api/orders
+
+### 1. Register an ADMIN user
+POST {{authUrl}}/register
+Content-Type: application/json
+
+{
+  "username": "admin1",
+  "password": "AdminPass123!",
+  "role": "ADMIN"
+}
+
+### 2. Register a regular USER
+POST {{authUrl}}/register
+Content-Type: application/json
+
+{
+  "username": "user1",
+  "password": "UserPass123!"
+}
+
+### 3. Login as Admin (copy the returned token into @adminToken below)
+POST {{authUrl}}/login
+Content-Type: application/json
+
+{
+  "username": "admin1",
+  "password": "AdminPass123!"
+}
+
+### 4. Login as User (copy the returned token into @userToken below)
+POST {{authUrl}}/login
+Content-Type: application/json
+
+{
+  "username": "user1",
+  "password": "UserPass123!"
+}
+
+### ------------------------------------------------------------
+@adminToken = PASTE_ADMIN_TOKEN_HERE
+@userToken = PASTE_USER_TOKEN_HERE
+### ------------------------------------------------------------
+
+### 5. Get current user profile (either token)
+GET {{authUrl}}/me
+Authorization: Bearer {{userToken}}
+
+### 6. Admin creates a product
+POST {{productsUrl}}
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{
+  "productName": "Wireless Mouse",
+  "stockQty": 50
+}
+
+### 7. List products (paginated) - any authenticated user
+GET {{productsUrl}}?pageNumber=1&pageSize=10
+Authorization: Bearer {{userToken}}
+
+### 8. Get product by ID (replace with a real ID from step 6's response)
+GET {{productsUrl}}/00000000-0000-0000-0000-000000000000
+Authorization: Bearer {{userToken}}
+
+### 9. Admin updates stock directly
+PUT {{productsUrl}}/00000000-0000-0000-0000-000000000000
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{
+  "stockQty": 100
+}
+
+### 10. User places an order (OrderService validates JWT, checks stock via InventoryService, reduces stock, saves order as CONFIRMED)
+POST {{ordersUrl}}
+Authorization: Bearer {{userToken}}
+Content-Type: application/json
+
+{
+  "items": [
+    { "productId": "00000000-0000-0000-0000-000000000000", "quantity": 2 }
+  ]
+}
+
+### 11. User views their own order history
+GET {{ordersUrl}}/my-orders
+Authorization: Bearer {{userToken}}
+
+### 12. Get a specific order by ID (owner or admin only, replace with a real order ID)
+GET {{ordersUrl}}/00000000-0000-0000-0000-000000000000
+Authorization: Bearer {{userToken}}
+
+### 13. Cancel an order (restores stock, sets status to CANCELLED)
+PATCH {{ordersUrl}}/00000000-0000-0000-0000-000000000000/cancel
+Authorization: Bearer {{userToken}}
+
+### 14. Admin: list ALL orders across all users (bonus endpoint beyond the base spec)
+GET {{ordersUrl}}?pageNumber=1&pageSize=20
+Authorization: Bearer {{adminToken}}
+
+### 15. Negative test: User attempting to create a product directly should be 403 Forbidden
+POST {{productsUrl}}
+Authorization: Bearer {{userToken}}
+Content-Type: application/json
+
+{
+  "productName": "Should Fail",
+  "stockQty": 10
+}
