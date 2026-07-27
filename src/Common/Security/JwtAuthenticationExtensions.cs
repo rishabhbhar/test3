@@ -9,11 +9,7 @@ namespace Common.Security
 {
     public static class JwtAuthenticationExtensions
     {
-        /// <summary>
-        /// Registers JWT bearer authentication using the shared Jwt:* configuration
-        /// section. Used identically by AuthService (issuer) and by InventoryService /
-        /// OrderService (resource servers validating tokens minted by AuthService).
-        /// </summary>
+       
         public static IServiceCollection AddSharedJwtAuthentication(
             this IServiceCollection services,
             IConfiguration configuration)
