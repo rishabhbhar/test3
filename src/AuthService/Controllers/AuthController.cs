@@ -20,7 +20,7 @@ namespace AuthService.Controllers
             _logger = logger;
         }
 
-        /// <summary>Register a new user. Defaults to role USER unless "role" is explicitly provided.</summary>
+        
         [HttpPost("register")]
         [AllowAnonymous]
         [ProducesResponseType(typeof(AuthResponseDto), StatusCodes.Status201Created)]
@@ -36,7 +36,7 @@ namespace AuthService.Controllers
             return CreatedAtAction(nameof(Me), null, result);
         }
 
-        /// <summary>Authenticate and receive a JWT access token.</summary>
+        
         [HttpPost("login")]
         [AllowAnonymous]
         [ProducesResponseType(typeof(AuthResponseDto), StatusCodes.Status200OK)]
@@ -52,7 +52,7 @@ namespace AuthService.Controllers
             return Ok(result);
         }
 
-        /// <summary>Get the currently authenticated user's profile.</summary>
+        
         [HttpGet("me")]
         [Authorize]
         [ProducesResponseType(typeof(UserResponseDto), StatusCodes.Status200OK)]
