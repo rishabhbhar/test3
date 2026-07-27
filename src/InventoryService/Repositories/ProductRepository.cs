@@ -75,10 +75,6 @@ namespace InventoryService.Repositories
 
         public async Task<bool> TryReduceStockAsync(Guid productId, int quantity)
         {
-            // Single atomic UPDATE ... WHERE stock_qty >= @quantity AND is_active = 1.
-            // Prevents overselling under concurrent requests without needing an explicit
-            // transaction/row lock: the database evaluates the WHERE predicate and the
-            // SET in one statement, so a second concurrent call sees the already-updated value.
             var rowsAffected = await _context.Products
                 .Where(p => p.ProductId == productId && p.IsActive && p.StockQty >= quantity)
                 .ExecuteUpdateAsync(setters => setters
