@@ -8,18 +8,18 @@ using Microsoft.Extensions.Configuration.UserSecrets;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Load user-secrets in development so Jwt:Secret can be stored outside appsettings.json
+
 if (builder.Environment.IsDevelopment())
 {
     builder.Configuration.AddUserSecrets<Program>();
 }
 
-// ---------- Logging ----------
+
 builder.Logging.ClearProviders();
 builder.Logging.AddConsole();
 builder.Logging.AddDebug();
 
-// ---------- Services ----------
+
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
@@ -52,7 +52,7 @@ builder.Services.AddScoped<IPasswordHasher, Pbkdf2PasswordHasher>();
 builder.Services.AddScoped<ITokenService, JwtTokenService>();
 builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
 
-// Shared JWT bearer authentication (AuthService both issues and validates its own tokens for /me)
+
 builder.Services.AddSharedJwtAuthentication(builder.Configuration);
 
 builder.Services.AddCors(options =>
@@ -62,7 +62,7 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
-// ---------- Middleware pipeline ----------
+
 app.UseMiddleware<ExceptionHandlingMiddleware>();
 
 if (app.Environment.IsDevelopment())
@@ -79,9 +79,7 @@ app.MapControllers();
 
 app.MapGet("/health", () => Results.Ok(new { status = "Healthy", service = "AuthService" })).AllowAnonymous();
 
-// Note: schema is provisioned via Database/*.sql (see README). If you prefer EF Core
-// migrations instead, run `dotnet ef migrations add InitialCreate` in this project and
-// uncomment a db.Database.Migrate() call here.
+
 
 app.Run();
 
