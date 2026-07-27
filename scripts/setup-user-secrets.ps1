@@ -1,12 +1,4 @@
-<#
-  Generates a cryptographically secure 32-byte Base64 secret and sets
-  Jwt user-secrets for all three projects in this repository.
 
-  Usage (from repository root):
-	powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\setup-user-secrets.ps1
-
-  This script does NOT print the secret. It only reports which projects were updated.
-#>
 
 try {
 	Write-Host "Generating secure JWT secret..."
