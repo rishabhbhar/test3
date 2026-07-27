@@ -9,18 +9,18 @@ using Microsoft.Extensions.Configuration.UserSecrets;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Load user-secrets in development so Jwt:Secret can be stored outside appsettings.json
+
 if (builder.Environment.IsDevelopment())
 {
     builder.Configuration.AddUserSecrets<Program>();
 }
 
-// ---------- Logging ----------
+
 builder.Logging.ClearProviders();
 builder.Logging.AddConsole();
 builder.Logging.AddDebug();
 
-// ---------- Services ----------
+
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
@@ -52,8 +52,7 @@ builder.Services.AddDbContext<InventoryDbContext>(options =>
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<IProductService, ProductService>();
 
-// Validates JWTs minted by AuthService (same Jwt:Secret/Issuer/Audience) +
-// registers the AdminOrInternalService policy used by the stock endpoints.
+
 builder.Services.AddSharedJwtAuthentication(builder.Configuration);
 
 builder.Services.AddCors(options =>
