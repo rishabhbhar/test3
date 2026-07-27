@@ -5,32 +5,25 @@ using Microsoft.Extensions.Logging;
 
 namespace Common.Middleware
 {
-    /// <summary>
-    /// Thrown by service-layer code for expected business rule violations
-    /// (e.g. insufficient stock, inactive product, invalid state transition).
-    /// Mapped to 400 Bad Request by the exception middleware.
-    /// </summary>
+   
     public class BusinessRuleException : Exception
     {
         public BusinessRuleException(string message) : base(message) { }
     }
 
-    /// <summary>Thrown when a requested entity does not exist. Mapped to 404.</summary>
+    
     public class NotFoundException : Exception
     {
         public NotFoundException(string message) : base(message) { }
     }
 
-    /// <summary>Thrown when the caller is authenticated but not allowed to perform the action. Mapped to 403.</summary>
+   
     public class ForbiddenException : Exception
     {
         public ForbiddenException(string message) : base(message) { }
     }
 
-    /// <summary>
-    /// Catches all unhandled exceptions, logs them, and returns a consistent
-    /// ProblemDetails-shaped JSON response instead of leaking stack traces.
-    /// </summary>
+    
     public class ExceptionHandlingMiddleware
     {
         private readonly RequestDelegate _next;
