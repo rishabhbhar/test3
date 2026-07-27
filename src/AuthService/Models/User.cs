@@ -8,7 +8,7 @@ namespace AuthService.Models
 
         public string PasswordHash { get; set; } = string.Empty;
 
-        /// <summary>"ADMIN" or "USER" - matches the chk_user_role CHECK constraint.</summary>
+        
         public string Role { get; set; } = "USER";
 
         public bool IsActive { get; set; } = true;
