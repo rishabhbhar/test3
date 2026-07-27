@@ -10,7 +10,7 @@ namespace AuthService.DTOs
         [Required, MinLength(6)]
         public string Password { get; set; } = string.Empty;
 
-        /// <summary>Optional. Defaults to "USER" if not supplied. Only accepted values: ADMIN, USER.</summary>
+        
         [RegularExpression("^(ADMIN|USER)$", ErrorMessage = "Role must be either ADMIN or USER.")]
         public string? Role { get; set; }
     }
