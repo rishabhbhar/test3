@@ -6,13 +6,7 @@ using Microsoft.Extensions.Options;
 
 namespace Common.Security
 {
-    /// <summary>
-    /// Requirement satisfied when the caller is either an authenticated ADMIN user,
-    /// or a trusted internal service presenting the shared internal API key.
-    /// Used on InventoryService's stock-mutation endpoints so OrderService can
-    /// reduce/restore stock on behalf of a regular USER placing/cancelling an order,
-    /// while direct external callers still need the ADMIN role.
-    /// </summary>
+   
     public class AdminOrInternalServiceRequirement : IAuthorizationRequirement
     {
     }
