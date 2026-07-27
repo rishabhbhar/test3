@@ -14,14 +14,14 @@ namespace OrderService.Tests
         [Fact(Skip = "Integration test - run against local inventory service")]
         public async Task GetProduct_Returns_Product_When_Available()
         {
-            // Arrange
+         
             var httpClient = new HttpClient { BaseAddress = new Uri("http://localhost:5002/") };
             var client = new InventoryServiceClient(httpClient, new NullLogger<InventoryServiceClient>());
 
-            // Act
+          
             var product = await client.GetProductAsync(Guid.Parse("879906b6-ff4a-4066-a6d8-c1f508163bc4"), "your-token-here");
 
-            // Assert
+            
             Assert.NotNull(product);
         }
     }
