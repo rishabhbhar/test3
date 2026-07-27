@@ -9,7 +9,7 @@ namespace InventoryService.Controllers
     [ApiController]
     [Route("api/products")]
     [Produces("application/json")]
-    [Authorize] // every endpoint requires a valid JWT unless overridden below
+    [Authorize] 
     public class ProductsController : ControllerBase
     {
         private readonly IProductService _service;
@@ -21,7 +21,7 @@ namespace InventoryService.Controllers
             _logger = logger;
         }
 
-        /// <summary>Create a new product. Admin only.</summary>
+        
         [HttpPost]
         [Authorize(Roles = Roles.Admin)]
         [ProducesResponseType(typeof(ProductResponseDto), StatusCodes.Status201Created)]
@@ -36,7 +36,7 @@ namespace InventoryService.Controllers
             return CreatedAtAction(nameof(GetProductById), new { id = created.ProductId }, created);
         }
 
-        /// <summary>List products with pagination. Any authenticated user.</summary>
+       
         [HttpGet]
         [ProducesResponseType(typeof(PagedResult<ProductResponseDto>), StatusCodes.Status200OK)]
         public async Task<ActionResult<PagedResult<ProductResponseDto>>> ListProducts(
@@ -48,7 +48,7 @@ namespace InventoryService.Controllers
             return Ok(result);
         }
 
-        /// <summary>Get a product by ID. Any authenticated user.</summary>
+        
         [HttpGet("{id:guid}")]
         [ProducesResponseType(typeof(ProductResponseDto), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -63,7 +63,7 @@ namespace InventoryService.Controllers
             return Ok(product);
         }
 
-        /// <summary>Update a product (name, stock, active flag). Admin only.</summary>
+       
         [HttpPut("{id:guid}")]
         [Authorize(Roles = Roles.Admin)]
         [ProducesResponseType(typeof(ProductResponseDto), StatusCodes.Status200OK)]
@@ -84,7 +84,7 @@ namespace InventoryService.Controllers
             return Ok(updated);
         }
 
-        /// <summary>Delete a product. Admin only.</summary>
+       
         [HttpDelete("{id:guid}")]
         [Authorize(Roles = Roles.Admin)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
@@ -100,11 +100,7 @@ namespace InventoryService.Controllers
             return NoContent();
         }
 
-        /// <summary>
-        /// Reduce stock for a product. Allowed for: an Admin calling directly, OR
-        /// OrderService calling internally (with the X-Internal-Api-Key header) on
-        /// behalf of a User placing an order. See Common.Security.AdminOrInternalServiceHandler.
-        /// </summary>
+        
         [HttpPost("{id:guid}/reduce_stock")]
         [Authorize(Policy = InternalAuthDefaults.PolicyName)]
         [ProducesResponseType(typeof(ProductResponseDto), StatusCodes.Status200OK)]
@@ -121,11 +117,7 @@ namespace InventoryService.Controllers
             return Ok(result);
         }
 
-        /// <summary>
-        /// Restore (increase) stock for a product - used when OrderService cancels an
-        /// order and needs to roll back the earlier stock reduction. Same access rule
-        /// as reduce_stock: Admin, or a trusted internal service call.
-        /// </summary>
+       
         [HttpPost("{id:guid}/restore_stock")]
         [Authorize(Policy = InternalAuthDefaults.PolicyName)]
         [ProducesResponseType(typeof(ProductResponseDto), StatusCodes.Status200OK)]
